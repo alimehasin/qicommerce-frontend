@@ -41,7 +41,7 @@ export function LoginForm() {
     },
     onSuccess: async (data) => {
       await setToken(data.token);
-      router.push("/");
+      router.refresh();
     },
   });
 
@@ -75,9 +75,18 @@ export function LoginForm() {
         )}
       </div>
 
-      <Button type="submit">
-        <Key className="mr-2 h-4 w-4" />
-        Login
+      <Button type="submit" disabled={loginMut.isPending}>
+        {loginMut.isPending ? (
+          <>
+            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            Logging in...
+          </>
+        ) : (
+          <>
+            <Key className="mr-2 h-4 w-4" />
+            Login
+          </>
+        )}
       </Button>
     </form>
   );
