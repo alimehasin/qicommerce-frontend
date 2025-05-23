@@ -11,10 +11,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { env } from "@/env";
+import type { CartServerType } from "@/types/cart";
 import type { ProductServerType } from "@/types/products";
 import { constructImageUrl } from "@/utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ShoppingCart } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -31,6 +32,23 @@ export function Product({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(product.image_path);
+
+  const { data: cart } = useQuery<CartServerType>({
+    queryKey: ["/api/cart"],
+    queryFn: async () => {
+      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res.json();
+    },
+  });
+
+  const isInCart = cart?.items.some((item) => item.product_id === product.id);
+  const cartItem = cart?.items.find((item) => item.product_id === product.id);
 
   const addToCart = useMutation({
     mutationFn: async () => {
@@ -52,13 +70,65 @@ export function Product({
 
       return res.json();
     },
-
     onSuccess: () => {
       toast.success("Product added to cart");
       queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
     onError: () => {
       toast.error("Failed to add product to cart");
+    },
+  });
+
+  const updateCartItem = useMutation({
+    mutationFn: async (quantity: number) => {
+      if (!cartItem) {
+        return;
+      }
+
+      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${cartItem.id}`;
+      const res = await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify({ quantity }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Cart updated");
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+    },
+    onError: () => {
+      toast.error("Failed to update cart");
+    },
+  });
+
+  const removeFromCart = useMutation({
+    mutationFn: async () => {
+      if (!cartItem) {
+        return;
+      }
+
+      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${cartItem.id}`;
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Item removed from cart");
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+    },
+    onError: () => {
+      toast.error("Failed to remove item from cart");
     },
   });
 
@@ -178,21 +248,76 @@ export function Product({
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button
-                size="lg"
-                className="flex-1"
-                disabled={product.stock === 0}
-                onClick={() => {
-                  if (!token) {
-                    setOpen(true);
-                  } else {
-                    addToCart.mutate();
-                  }
-                }}
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
-              </Button>
+              {isInCart ? (
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          updateCartItem.mutate((cartItem?.quantity ?? 1) - 1)
+                        }
+                        disabled={
+                          updateCartItem.isPending ||
+                          (cartItem?.quantity ?? 1) <= 1
+                        }
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-8 text-center">
+                        {cartItem?.quantity}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          updateCartItem.mutate((cartItem?.quantity ?? 1) + 1)
+                        }
+                        disabled={
+                          updateCartItem.isPending ||
+                          (cartItem?.quantity ?? 1) >= product.stock
+                        }
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeFromCart.mutate()}
+                      disabled={removeFromCart.isPending}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    onClick={() => router.push("/cart")}
+                  >
+                    View Cart
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  size="lg"
+                  className="flex-1"
+                  disabled={product.stock === 0}
+                  onClick={() => {
+                    if (!token) {
+                      setOpen(true);
+                    } else {
+                      addToCart.mutate();
+                    }
+                  }}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Add to Cart
+                </Button>
+              )}
             </div>
 
             <div className="border-t pt-6">
