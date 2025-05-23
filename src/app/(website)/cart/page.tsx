@@ -8,7 +8,7 @@ export default async function CartPage() {
   const token = await getToken();
 
   if (!token) {
-    redirect("/login");
+    redirect("/login?redirect=/cart");
   }
 
   const cartRes = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
