@@ -1,8 +1,8 @@
 "use client";
 
-import { constructImageUrl } from "@/app/utils/helpers";
 import { cn } from "@/lib/utils";
 import type { ProductServerType } from "@/types/products";
+import { constructImageUrl } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
 

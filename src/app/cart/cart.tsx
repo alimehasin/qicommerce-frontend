@@ -1,8 +1,8 @@
 "use client";
 
-import { constructImageUrl } from "@/app/utils/helpers";
 import { Button } from "@/components/ui/button";
 import type { CartServerType } from "@/types/cart";
+import { constructImageUrl } from "@/utils/helpers";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 

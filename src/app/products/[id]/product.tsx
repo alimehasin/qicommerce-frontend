@@ -1,6 +1,5 @@
 "use client";
 
-import { constructImageUrl } from "@/app/utils/helpers";
 import { LoginForm } from "@/components/login-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { env } from "@/env";
 import type { ProductServerType } from "@/types/products";
+import { constructImageUrl } from "@/utils/helpers";
 import { useMutation } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
