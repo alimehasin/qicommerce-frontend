@@ -17,7 +17,7 @@ export function Products() {
   });
 
   return (
-    <div>
+    <div className="container mx-auto p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
       {products.data?.data.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
