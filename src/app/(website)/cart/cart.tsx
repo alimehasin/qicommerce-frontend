@@ -1,18 +1,70 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { env } from "@/env";
 import type { CartServerType } from "@/types/cart";
 import { constructImageUrl } from "@/utils/helpers";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-export function Cart({ cart }: { cart: CartServerType }) {
-  const subtotal = cart.items.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0,
-  );
-  const shipping = 10; // Example shipping cost
-  const total = subtotal + shipping;
+export function Cart({
+  cart,
+  token,
+}: {
+  cart: CartServerType;
+  token: string;
+}) {
+  const router = useRouter();
+  const total = cart.items.reduce((acc, item) => {
+    return acc + item.product.price * item.quantity;
+  }, 0);
+
+  const removeItemMutation = useMutation({
+    mutationFn: async (itemId: number) => {
+      const res = await fetch(
+        `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      return res.json();
+    },
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
+  const updateItemMutation = useMutation({
+    mutationFn: async ({
+      itemId,
+      quantity,
+    }: {
+      itemId: number;
+      quantity: number;
+    }) => {
+      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`;
+      const res = await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify({ quantity }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res.json();
+    },
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -51,11 +103,14 @@ export function Cart({ cart }: { cart: CartServerType }) {
                   <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Button
-                        variant="outline"
                         size="icon"
+                        variant="outline"
                         className="h-8 w-8"
                         onClick={() => {
-                          // TODO: Implement decrease quantity
+                          updateItemMutation.mutate({
+                            itemId: item.id,
+                            quantity: item.quantity - 1,
+                          });
                         }}
                       >
                         <Minus className="h-4 w-4" />
@@ -66,7 +121,10 @@ export function Cart({ cart }: { cart: CartServerType }) {
                         size="icon"
                         className="h-8 w-8"
                         onClick={() => {
-                          // TODO: Implement increase quantity
+                          updateItemMutation.mutate({
+                            itemId: item.id,
+                            quantity: item.quantity + 1,
+                          });
                         }}
                       >
                         <Plus className="h-4 w-4" />
@@ -76,15 +134,19 @@ export function Cart({ cart }: { cart: CartServerType }) {
                       <span className="font-semibold">
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </span>
+
                       <Button
-                        variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-destructive"
-                        onClick={() => {
-                          // TODO: Implement remove item
-                        }}
+                        variant="ghost"
+                        onClick={() => removeItemMutation.mutate(item.id)}
+                        className="h-8 w-8 text-destructive hover:bg-destructive hover:text-white"
+                        disabled={removeItemMutation.isPending}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        {removeItemMutation.isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -101,11 +163,11 @@ export function Cart({ cart }: { cart: CartServerType }) {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Shipping</span>
-                  <span>${shipping.toFixed(2)}</span>
+                  <span>Free</span>
                 </div>
                 <div className="border-t pt-2 flex justify-between font-semibold">
                   <span>Total</span>

@@ -9,12 +9,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { env } from "@/env";
 import type { ProductServerType } from "@/types/products";
 import { constructImageUrl } from "@/utils/helpers";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,6 +28,7 @@ export function Product({
   token?: string;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(product.image_path);
 
@@ -55,6 +55,7 @@ export function Product({
 
     onSuccess: () => {
       toast.success("Product added to cart");
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
     onError: () => {
       toast.error("Failed to add product to cart");
@@ -75,7 +76,6 @@ export function Product({
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Login to add product to cart</DialogTitle>

@@ -17,5 +17,5 @@ export default async function CartPage() {
 
   const cart: CartServerType = await cartRes.json();
 
-  return <Cart cart={cart} />;
+  return <Cart cart={cart} token={token} />;
 }
