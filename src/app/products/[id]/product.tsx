@@ -36,32 +36,44 @@ export function Product({ product }: { product: ProductServerType }) {
               src={constructImageUrl(selectedImage)}
             />
           </div>
+
           {product.images.length > 0 && (
             <div className="grid grid-cols-4 gap-2">
               <button
                 type="button"
-                className="relative aspect-square cursor-pointer rounded-lg overflow-hidden p-0 border-0 bg-transparent"
                 onClick={() => handleImageSelect(product.image_path)}
+                onKeyDown={(e) => handleKeyDown(e, product.image_path)}
+                className={`relative aspect-square cursor-pointer rounded-lg overflow-hidden p-0 border-2 ${
+                  selectedImage === product.image_path
+                    ? "border-primary"
+                    : "border-transparent"
+                } bg-transparent`}
               >
                 <Image
-                  src={constructImageUrl(product.image_path)}
-                  alt={product.name}
                   fill
-                  className="object-contain"
+                  alt={product.name}
+                  className="object-contain p-1"
+                  src={constructImageUrl(product.image_path)}
                 />
               </button>
+
               {product.images.map((image) => (
                 <button
                   key={image.id}
                   type="button"
-                  className="relative aspect-square cursor-pointer rounded-lg overflow-hidden p-0 border-0 bg-transparent"
+                  className={`relative aspect-square cursor-pointer rounded-lg overflow-hidden border-2 ${
+                    selectedImage === image.image_path
+                      ? "border-primary"
+                      : "border-transparent"
+                  } bg-transparent`}
                   onClick={() => handleImageSelect(image.image_path)}
+                  onKeyDown={(e) => handleKeyDown(e, image.image_path)}
                 >
                   <Image
-                    src={constructImageUrl(image.image_path)}
-                    alt={product.name}
                     fill
-                    className="object-contain"
+                    alt={product.name}
+                    className="object-contain p-1"
+                    src={constructImageUrl(image.image_path)}
                   />
                 </button>
               ))}
