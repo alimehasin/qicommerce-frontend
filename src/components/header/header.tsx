@@ -2,12 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { env } from "@/env";
+import type { CartServerType } from "@/types/cart";
+import { useQuery } from "@tanstack/react-query";
 import { Menu, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export function Header() {
+export function Header({ token }: { token?: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const cart = useQuery({
+    queryKey: ["/api/cart"],
+    queryFn: async () => {
+      const cartRes = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const cart: CartServerType = await cartRes.json();
+
+      return cart;
+    },
+  });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -49,12 +65,14 @@ export function Header() {
             </Button>
           </div>
 
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-              0
-            </span>
-          </Button>
+          <Link href="/cart">
+            <Button variant="ghost" size="icon" className="relative">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                {cart.data?.items.length ?? 0}
+              </span>
+            </Button>
+          </Link>
 
           <Button
             variant="ghost"

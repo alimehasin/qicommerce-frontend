@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+import { getToken } from "@/server/actions";
 import type { Metadata } from "next";
 import { ClientProviders } from "./client-providers";
 import { ThemeProvider } from "./theme-provider";
@@ -11,11 +12,13 @@ export const metadata: Metadata = {
   description: "QiCommerce Frontend | Find the best products for you",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = await getToken();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -26,7 +29,7 @@ export default function RootLayout({
             defaultTheme="light"
             disableTransitionOnChange
           >
-            <Header />
+            <Header token={token} />
 
             <main className="container mx-auto py-6">{children}</main>
 
