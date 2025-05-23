@@ -1,6 +1,6 @@
 import { Products } from "@/components/products";
 
-export default async function HomePage() {
+export default function ProductsPage() {
   return (
     <div>
       <Products />
