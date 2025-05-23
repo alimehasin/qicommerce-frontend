@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 
 import { Header } from "@/components/header";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { ClientProviders } from "./client-providers";
 import { ThemeProvider } from "./theme-provider";
@@ -28,6 +29,8 @@ export default function RootLayout({
             <Header />
 
             <main className="container mx-auto py-6">{children}</main>
+
+            <Toaster />
           </ThemeProvider>
         </ClientProviders>
       </body>

@@ -5,8 +5,8 @@ import { setToken } from "@/server/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Key } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -16,9 +16,7 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-export function LoginForm() {
-  const router = useRouter();
-
+export function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
@@ -41,7 +39,11 @@ export function LoginForm() {
     },
     onSuccess: async (data) => {
       await setToken(data.token);
-      router.refresh();
+
+      onSuccess();
+    },
+    onError: () => {
+      toast.error("Invalid email or password");
     },
   });
 

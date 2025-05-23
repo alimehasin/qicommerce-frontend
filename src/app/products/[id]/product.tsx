@@ -17,7 +17,9 @@ import type { ProductServerType } from "@/types/products";
 import { useMutation } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function Product({
   product,
@@ -26,6 +28,7 @@ export function Product({
   product: ProductServerType;
   token?: string;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(product.image_path);
 
@@ -73,7 +76,13 @@ export function Product({
             </DialogDescription>
           </DialogHeader>
 
-          <LoginForm />
+          <LoginForm
+            onSuccess={() => {
+              setOpen(false);
+              toast.success("Logged in successfully");
+              router.refresh();
+            }}
+          />
         </DialogContent>
       </Dialog>
 
