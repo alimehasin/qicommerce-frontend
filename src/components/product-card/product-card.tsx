@@ -1,6 +1,6 @@
 "use client";
 
-import { env } from "@/env";
+import { constructImageUrl } from "@/app/utils/helpers";
 import { cn } from "@/lib/utils";
 import type { ProductServerType } from "@/types/products";
 import Image from "next/image";
@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: ProductServerType }) {
       <div className="group rounded-lg border shadow-sm transition-all hover:shadow-md">
         <div className="aspect-square overflow-hidden p-4">
           <Image
-            src={`${env.NEXT_PUBLIC_STORAGE_BASE_URL}/${product.image_path}`}
+            src={constructImageUrl(product.image_path)}
             alt={product.name}
             width={500}
             height={500}
