@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Providers } from "./providers/providers";
 
@@ -16,7 +17,11 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

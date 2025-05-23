@@ -77,7 +77,7 @@ export function LoginForm({ onSuccess }: { onSuccess: () => void }) {
         )}
       </div>
 
-      <Button type="submit" disabled={loginMut.isPending}>
+      <Button type="submit" disabled={loginMut.isPending} className="w-full">
         {loginMut.isPending ? (
           <>
             <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
