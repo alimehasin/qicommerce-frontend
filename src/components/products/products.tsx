@@ -56,7 +56,7 @@ export function Products() {
   }
 
   return (
-    <div className="container mx-auto p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+    <div className="p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
       {products.data?.pages.map((page) =>
         page.data.map((product, index) => {
           const isLastProduct =

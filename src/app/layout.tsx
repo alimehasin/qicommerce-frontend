@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 
+import { Header } from "@/components/header";
 import type { Metadata } from "next";
 import { ClientProviders } from "./client-providers";
 import { ThemeProvider } from "./theme-provider";
@@ -24,7 +25,9 @@ export default function RootLayout({
             defaultTheme="system"
             disableTransitionOnChange
           >
-            {children}
+            <Header />
+
+            <main className="container mx-auto py-6">{children}</main>
           </ThemeProvider>
         </ClientProviders>
       </body>
