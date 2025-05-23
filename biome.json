@@ -16,15 +16,31 @@
   "organizeImports": {
     "enabled": true
   },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double"
+    }
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {},
+      "nursery": {},
+      "security": {},
+      "complexity": {},
+      "suspicious": {},
+      "performance": {},
+      "correctness": {
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn",
+        "useHookAtTopLevel": "warn",
+        "useExhaustiveDependencies": "off"
+      },
+      "style": {
+        "useBlockStatements": "error"
+      }
     }
   }
 }

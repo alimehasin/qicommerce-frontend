@@ -1,11 +1,7 @@
 import "@/styles/globals.css";
 
-import { Header } from "@/components/header";
-import { Toaster } from "@/components/ui/sonner";
-import { getToken } from "@/server/actions";
 import type { Metadata } from "next";
-import { ClientProviders } from "./client-providers";
-import { ThemeProvider } from "./theme-provider";
+import { Providers } from "./providers/providers";
 
 export const metadata: Metadata = {
   title: "QiCommerce",
@@ -17,25 +13,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = await getToken();
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ClientProviders>
-          <ThemeProvider
-            enableSystem
-            attribute="class"
-            defaultTheme="light"
-            disableTransitionOnChange
-          >
-            <Header token={token} />
-
-            <main className="container mx-auto py-6">{children}</main>
-
-            <Toaster />
-          </ThemeProvider>
-        </ClientProviders>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
