@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function Cart({
   cart,
@@ -17,6 +18,8 @@ export function Cart({
   token: string;
 }) {
   const router = useRouter();
+  const [deletingItemId, setDeletingItemId] = useState<number | null>(null);
+
   const total = cart.items.reduce((acc, item) => {
     return acc + item.product.price * item.quantity;
   }, 0);
@@ -138,11 +141,16 @@ export function Cart({
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => removeItemMutation.mutate(item.id)}
+                        disabled={deletingItemId === item.id}
                         className="h-8 w-8 text-destructive hover:bg-destructive hover:text-white"
-                        disabled={removeItemMutation.isPending}
+                        onClick={() => {
+                          setDeletingItemId(item.id);
+                          removeItemMutation.mutate(item.id, {
+                            onSettled: () => setDeletingItemId(null),
+                          });
+                        }}
                       >
-                        {removeItemMutation.isPending ? (
+                        {deletingItemId === item.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Trash2 className="h-4 w-4" />
