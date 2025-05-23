@@ -34,10 +34,11 @@ export function Product({
 
   const addToCart = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart/add`, {
+      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart/items`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           product_id: product.id,
@@ -50,6 +51,13 @@ export function Product({
       }
 
       return res.json();
+    },
+
+    onSuccess: () => {
+      toast.success("Product added to cart");
+    },
+    onError: () => {
+      toast.error("Failed to add product to cart");
     },
   });
 
@@ -177,6 +185,8 @@ export function Product({
                 onClick={() => {
                   if (!token) {
                     setOpen(true);
+                  } else {
+                    addToCart.mutate();
                   }
                 }}
               >
