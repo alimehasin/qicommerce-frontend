@@ -3,13 +3,42 @@
 import { constructImageUrl } from "@/app/utils/helpers";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { env } from "@/env";
 import type { ProductServerType } from "@/types/products";
+import { useMutation } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-export function Product({ product }: { product: ProductServerType }) {
+export function Product({
+  product,
+  token,
+}: {
+  product: ProductServerType;
+  token?: string;
+}) {
   const [selectedImage, setSelectedImage] = useState(product.image_path);
+
+  const addToCart = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: product.id,
+          quantity: 1,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to add product to cart");
+      }
+
+      return res.json();
+    },
+  });
 
   const handleImageSelect = (imagePath: string) => {
     setSelectedImage(imagePath);
@@ -105,7 +134,16 @@ export function Product({ product }: { product: ProductServerType }) {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button size="lg" className="flex-1" disabled={product.stock === 0}>
+            <Button
+              size="lg"
+              className="flex-1"
+              disabled={product.stock === 0}
+              onClick={() => {
+                if (!token) {
+                  alert("Please login to add product to cart");
+                }
+              }}
+            >
               <ShoppingCart className="mr-2 h-5 w-5" />
               Add to Cart
             </Button>

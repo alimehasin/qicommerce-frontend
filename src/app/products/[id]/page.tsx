@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { getToken } from "@/server/actions";
 import { Product } from "./product";
 
 export default async function ProductPage({
@@ -12,5 +13,7 @@ export default async function ProductPage({
   const productRes = await fetch(url);
   const product = await productRes.json();
 
-  return <Product product={product} />;
+  const token = await getToken();
+
+  return <Product product={product} token={token} />;
 }
