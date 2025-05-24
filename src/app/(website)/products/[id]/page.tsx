@@ -8,12 +8,17 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const token = await getToken();
 
   const url = `${env.NEXT_PUBLIC_API_BASE_URL}/products/${id}`;
-  const productRes = await fetch(url);
-  const product = await productRes.json();
+  const productRes = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
 
-  const token = await getToken();
+  const product = await productRes.json();
 
   return <Product product={product} token={token} />;
 }

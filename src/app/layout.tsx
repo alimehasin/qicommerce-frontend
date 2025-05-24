@@ -1,7 +1,9 @@
 import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
+import { getToken } from "@/server/actions";
 import type { Metadata } from "next";
+import { Config } from "./config";
 import { Providers } from "./providers/providers";
 
 export const metadata: Metadata = {
@@ -14,6 +16,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = await getToken();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -21,6 +25,7 @@ export default async function RootLayout({
           {children}
 
           <Toaster />
+          <Config token={token} />
         </Providers>
       </body>
     </html>

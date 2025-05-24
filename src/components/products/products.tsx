@@ -13,7 +13,12 @@ export function Products() {
 
     queryFn: async ({ pageParam = 1 }) => {
       const url = `${env.NEXT_PUBLIC_API_BASE_URL}/products?per_page=4&page=${pageParam}`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
 
       const data: ProductsServerType = await res.json();
       return data;

@@ -12,7 +12,11 @@ export default async function CartPage() {
   }
 
   const cartRes = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
   });
 
   const cart: CartServerType = await cartRes.json();

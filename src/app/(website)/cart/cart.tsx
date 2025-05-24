@@ -42,6 +42,7 @@ export function Cart({
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            Accept: "application/json",
           },
         },
       );
@@ -68,6 +69,7 @@ export function Cart({
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 

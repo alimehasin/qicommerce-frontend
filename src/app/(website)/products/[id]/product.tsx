@@ -40,6 +40,7 @@ export function Product({
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 
@@ -55,8 +56,9 @@ export function Product({
       const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart/items`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           product_id: product.id,
@@ -90,8 +92,9 @@ export function Product({
         method: "PUT",
         body: JSON.stringify({ quantity }),
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 
@@ -118,6 +121,7 @@ export function Product({
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 

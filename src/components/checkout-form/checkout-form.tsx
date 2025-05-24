@@ -47,6 +47,7 @@ export function CheckoutForm({ token }: { token?: string }) {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       });
 

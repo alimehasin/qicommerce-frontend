@@ -25,14 +25,16 @@ export function LoginForm({ onSuccess }: { onSuccess: () => void }) {
     mutationFn: async (data: z.infer<typeof loginSchema>) => {
       const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/login`, {
         method: "POST",
+        body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(data),
       });
 
       if (!res.ok) {
-        throw new Error("Failed to login");
+        const error = await res.json();
+        throw new Error(error.message);
       }
 
       return res.json();
