@@ -4,7 +4,9 @@ import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import type { ProductsServerType } from "@/types/products";
 import { constructApiUrl } from "@/utils/helpers";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { AlertCircle } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
@@ -82,7 +84,25 @@ export function Products() {
   }
 
   if (products.status === "error") {
-    return <div>Error loading products</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 text-center">
+        <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+        <h3 className="text-xl font-semibold mb-2">Failed to Load Products</h3>
+        <p className="text-gray-600 mb-6 max-w-md">
+          {products.error instanceof Error
+            ? products.error.message
+            : "There was an error loading the products. Please try again."}
+        </p>
+        <Button
+          onClick={() => products.refetch()}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <AlertCircle className="w-4 h-4" />
+          Try Again
+        </Button>
+      </div>
+    );
   }
 
   return (
