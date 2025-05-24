@@ -48,8 +48,8 @@ export function Product({
     },
   });
 
-  const isInCart = cart?.items.some((item) => item.product_id === product.id);
-  const cartItem = cart?.items.find((item) => item.product_id === product.id);
+  const isInCart = cart?.items?.some((item) => item.product_id === product.id);
+  const cartItem = cart?.items?.find((item) => item.product_id === product.id);
 
   const addToCart = useMutation({
     mutationFn: async () => {

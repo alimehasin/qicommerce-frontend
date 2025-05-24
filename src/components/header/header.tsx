@@ -23,6 +23,10 @@ export function Header({ token }: { token?: string }) {
         },
       });
 
+      if (!cartRes.ok) {
+        return null;
+      }
+
       const cart: CartServerType = await cartRes.json();
 
       return cart;
@@ -73,7 +77,7 @@ export function Header({ token }: { token?: string }) {
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                {cart.data?.items.length ?? 0}
+                {cart.data?.items?.length ?? 0}
               </span>
             </Button>
           </Link>
