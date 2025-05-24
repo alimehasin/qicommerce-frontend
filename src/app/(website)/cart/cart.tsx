@@ -158,7 +158,12 @@ export function Cart({
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="font-semibold">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          {(
+                            item.product.price * item.quantity
+                          ).toLocaleString()}{" "}
+                          <span className="text-sm text-muted-foreground">
+                            IQD
+                          </span>
                         </span>
 
                         <Button
@@ -194,7 +199,10 @@ export function Cart({
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
-                    <span>${total.toLocaleString()}</span>
+                    <span>
+                      {total.toLocaleString()}{" "}
+                      <span className="text-sm text-muted-foreground">IQD</span>
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Shipping</span>
@@ -202,7 +210,10 @@ export function Cart({
                   </div>
                   <div className="border-t pt-2 flex justify-between font-semibold">
                     <span>Total</span>
-                    <span>${total.toLocaleString()}</span>
+                    <span>
+                      {total.toLocaleString()}{" "}
+                      <span className="text-sm text-muted-foreground">IQD</span>
+                    </span>
                   </div>
                 </div>
 

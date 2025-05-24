@@ -28,7 +28,8 @@ export function ProductCard({ product }: { product: ProductServerType }) {
 
           <div className="mt-4 flex items-center justify-between">
             <span className="text-lg font-bold">
-              ${product.price.toFixed(2)}
+              {product.price.toLocaleString()}{" "}
+              <span className="text-sm text-muted-foreground">IQD</span>
             </span>
             <span
               className={cn(

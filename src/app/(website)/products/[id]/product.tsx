@@ -233,7 +233,8 @@ export function Product({
 
             <div className="flex items-center space-x-4">
               <span className="text-2xl font-bold text-gray-900">
-                ${product.price.toFixed(2)}
+                {product.price.toLocaleString()}{" "}
+                <span className="text-sm text-muted-foreground">IQD</span>
               </span>
               <Badge
                 variant={product.stock > 0 ? "default" : "destructive"}
