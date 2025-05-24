@@ -47,7 +47,6 @@ export function RegisterForm({
 
       if (!res.ok) {
         const error = await res.json();
-        console.log(error);
         throw new Error(error.message);
       }
 
