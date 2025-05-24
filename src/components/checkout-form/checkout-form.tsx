@@ -51,7 +51,8 @@ export function CheckoutForm({ token }: { token?: string }) {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to checkout");
+        const error = await res.json();
+        throw new Error(error.message);
       }
 
       return res.json();
@@ -63,8 +64,8 @@ export function CheckoutForm({ token }: { token?: string }) {
       queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
 
-    onError: () => {
-      toast.error("Failed to checkout");
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
