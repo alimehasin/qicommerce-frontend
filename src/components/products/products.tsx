@@ -20,6 +20,11 @@ export function Products() {
         },
       });
 
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
       const data: ProductsServerType = await res.json();
       return data;
     },

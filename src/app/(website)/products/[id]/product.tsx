@@ -33,7 +33,7 @@ export function Product({
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(product.image_path);
 
-  const { data: cart } = useQuery<CartServerType>({
+  const cart = useQuery<CartServerType>({
     queryKey: ["/api/cart"],
     queryFn: async () => {
       const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
@@ -44,12 +44,22 @@ export function Product({
         },
       });
 
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
       return res.json();
     },
   });
 
-  const isInCart = cart?.items?.some((item) => item.product_id === product.id);
-  const cartItem = cart?.items?.find((item) => item.product_id === product.id);
+  const isInCart = cart.data?.items?.some((item) => {
+    return item.product_id === product.id;
+  });
+
+  const cartItem = cart.data?.items?.find((item) => {
+    return item.product_id === product.id;
+  });
 
   const addToCart = useMutation({
     mutationFn: async () => {
@@ -67,7 +77,8 @@ export function Product({
       });
 
       if (!res.ok) {
-        throw new Error("Failed to add product to cart");
+        const error = await res.json();
+        throw new Error(error.message);
       }
 
       return res.json();
@@ -76,8 +87,8 @@ export function Product({
       toast.success("Product added to cart");
       queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
-    onError: () => {
-      toast.error("Failed to add product to cart");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -98,14 +109,19 @@ export function Product({
         },
       });
 
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
       return res.json();
     },
     onSuccess: () => {
       toast.success("Cart updated");
       queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
-    onError: () => {
-      toast.error("Failed to update cart");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -125,14 +141,19 @@ export function Product({
         },
       });
 
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
       return res.json();
     },
     onSuccess: () => {
       toast.success("Item removed from cart");
       queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
     },
-    onError: () => {
-      toast.error("Failed to remove item from cart");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

@@ -17,6 +17,7 @@ import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function Cart({
   cart,
@@ -35,22 +36,28 @@ export function Cart({
 
   const removeItemMutation = useMutation({
     mutationFn: async (itemId: number) => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`;
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-      );
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
 
       return res.json();
     },
     onSuccess: () => {
       router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -73,10 +80,18 @@ export function Cart({
         },
       });
 
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
       return res.json();
     },
     onSuccess: () => {
       router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
