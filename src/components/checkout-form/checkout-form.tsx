@@ -10,9 +10,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 const cartSchema = z.object({
   address: z.string().min(1),
+  phoneNumber: z.string().min(1),
+  note: z.string().optional(),
 });
 
 export function CheckoutForm({ token }: { token?: string }) {
@@ -24,11 +27,23 @@ export function CheckoutForm({ token }: { token?: string }) {
   });
 
   const checkoutMutation = useMutation({
-    mutationFn: async ({ address }: { address: string }) => {
+    mutationFn: async ({
+      address,
+      phoneNumber,
+      note,
+    }: {
+      address: string;
+      phoneNumber: string;
+      note?: string;
+    }) => {
       const url = `${env.NEXT_PUBLIC_API_BASE_URL}/orders/checkout`;
       const res = await fetch(url, {
         method: "POST",
-        body: JSON.stringify({ shipping_address: address }),
+        body: JSON.stringify({
+          shipping_address: address,
+          phone_number: phoneNumber,
+          note,
+        }),
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -61,6 +76,8 @@ export function CheckoutForm({ token }: { token?: string }) {
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
         <Input {...form.register("address")} placeholder="Address" />
+        <Input {...form.register("phoneNumber")} placeholder="Phone Number" />
+        <Textarea {...form.register("note")} placeholder="Note" />
 
         <Button
           type="submit"
