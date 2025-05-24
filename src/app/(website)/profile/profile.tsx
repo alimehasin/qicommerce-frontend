@@ -51,7 +51,7 @@ export function Profile({
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8">
+        <div className="bg-primary px-6 py-8">
           <div className="flex items-center space-x-4">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
               <span className="text-2xl font-bold text-gray-700">
@@ -65,7 +65,6 @@ export function Profile({
           </div>
         </div>
 
-        {/* Profile Information */}
         <div className="px-6 py-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Profile Information
@@ -131,7 +130,6 @@ export function Profile({
           )}
         </div>
 
-        {/* Action Buttons */}
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <Button
             size="lg"
