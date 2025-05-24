@@ -1,6 +1,6 @@
-import { env } from "@/env";
 import { getToken } from "@/server/actions";
 import type { CartServerType } from "@/types/cart";
+import { constructApiUrl } from "@/utils/helpers";
 import { redirect } from "next/navigation";
 import { Cart } from "./cart";
 
@@ -11,7 +11,7 @@ export default async function CartPage() {
     redirect("/accounts/login?redirect=/cart");
   }
 
-  const cartRes = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+  const cartRes = await fetch(constructApiUrl("/cart"), {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

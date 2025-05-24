@@ -9,9 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { env } from "@/env";
 import type { CartServerType } from "@/types/cart";
-import { constructImageUrl } from "@/utils/helpers";
+import { constructApiUrl, constructImageUrl } from "@/utils/helpers";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -36,8 +35,7 @@ export function Cart({
 
   const removeItemMutation = useMutation({
     mutationFn: async (itemId: number) => {
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`;
-      const res = await fetch(url, {
+      const res = await fetch(constructApiUrl(`/cart/items/${itemId}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -69,8 +67,7 @@ export function Cart({
       itemId: number;
       quantity: number;
     }) => {
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${itemId}`;
-      const res = await fetch(url, {
+      const res = await fetch(constructApiUrl(`/cart/items/${itemId}`), {
         method: "PUT",
         body: JSON.stringify({ quantity }),
         headers: {

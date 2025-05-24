@@ -10,10 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { env } from "@/env";
 import type { CartServerType } from "@/types/cart";
 import type { ProductServerType } from "@/types/products";
-import { constructImageUrl } from "@/utils/helpers";
+import { constructApiUrl, constructImageUrl } from "@/utils/helpers";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
@@ -36,7 +35,7 @@ export function Product({
   const cart = useQuery<CartServerType>({
     queryKey: ["/api/cart"],
     queryFn: async () => {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+      const res = await fetch(constructApiUrl("/cart"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -63,7 +62,7 @@ export function Product({
 
   const addToCart = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart/items`, {
+      const res = await fetch(constructApiUrl("/cart/items"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -98,8 +97,7 @@ export function Product({
         return;
       }
 
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${cartItem.id}`;
-      const res = await fetch(url, {
+      const res = await fetch(constructApiUrl(`/cart/items/${cartItem.id}`), {
         method: "PUT",
         body: JSON.stringify({ quantity }),
         headers: {
@@ -131,8 +129,7 @@ export function Product({
         return;
       }
 
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/cart/items/${cartItem.id}`;
-      const res = await fetch(url, {
+      const res = await fetch(constructApiUrl(`/cart/items/${cartItem.id}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

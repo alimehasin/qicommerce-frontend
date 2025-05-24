@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { env } from "@/env";
 import type { CartServerType } from "@/types/cart";
+import { constructApiUrl } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { Menu, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +15,7 @@ export function Header({ token }: { token?: string }) {
   const cart = useQuery({
     queryKey: ["/api/cart"],
     queryFn: async () => {
-      const cartRes = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/cart`, {
+      const cartRes = await fetch(constructApiUrl("/cart"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

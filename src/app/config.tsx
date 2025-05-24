@@ -1,14 +1,14 @@
 "use client";
 
-import { env } from "@/env";
 import { deleteToken } from "@/server/actions";
+import { constructApiUrl } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 
 export function Config({ token }: { token?: string }) {
   useQuery({
     queryKey: ["config"],
     queryFn: async () => {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/profile`, {
+      const res = await fetch(constructApiUrl("/profile"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

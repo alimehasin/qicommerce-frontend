@@ -1,5 +1,5 @@
-import { env } from "@/env";
 import { getToken } from "@/server/actions";
+import { constructApiUrl } from "@/utils/helpers";
 import { Product } from "./product";
 
 export default async function ProductPage({
@@ -10,8 +10,7 @@ export default async function ProductPage({
   const { id } = await params;
   const token = await getToken();
 
-  const url = `${env.NEXT_PUBLIC_API_BASE_URL}/products/${id}`;
-  const productRes = await fetch(url, {
+  const productRes = await fetch(constructApiUrl(`/products/${id}`), {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

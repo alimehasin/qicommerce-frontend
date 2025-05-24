@@ -1,6 +1,5 @@
 "use client";
-
-import { env } from "@/env";
+import { constructApiUrl } from "@/utils/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -42,8 +41,7 @@ export function CheckoutForm({ token }: { token?: string }) {
       phoneNumber: string;
       note?: string;
     }) => {
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/orders/checkout`;
-      const res = await fetch(url, {
+      const res = await fetch(constructApiUrl("/orders/checkout"), {
         method: "POST",
         body: JSON.stringify({
           shipping_address: address,

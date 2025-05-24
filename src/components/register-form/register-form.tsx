@@ -1,7 +1,6 @@
 "use client";
-
-import { env } from "@/env";
 import { setToken } from "@/server/actions";
+import { constructApiUrl } from "@/utils/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Key } from "lucide-react";
@@ -37,7 +36,7 @@ export function RegisterForm({
 
   const registerMut = useMutation({
     mutationFn: async (data: z.infer<typeof registerSchema>) => {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/register`, {
+      const res = await fetch(constructApiUrl("/register"), {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

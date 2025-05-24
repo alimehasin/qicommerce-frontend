@@ -1,8 +1,8 @@
 "use client";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
-import { env } from "@/env";
 import type { ProductsServerType } from "@/types/products";
+import { constructApiUrl } from "@/utils/helpers";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useRef } from "react";
 
@@ -12,7 +12,7 @@ export function Products() {
     queryKey: ["/api/products"],
 
     queryFn: async ({ pageParam = 1 }) => {
-      const url = `${env.NEXT_PUBLIC_API_BASE_URL}/products?per_page=4&page=${pageParam}`;
+      const url = constructApiUrl(`/products?per_page=4&page=${pageParam}`);
       const res = await fetch(url, {
         headers: {
           "Content-Type": "application/json",
