@@ -13,3 +13,8 @@ export async function setToken(token: string) {
   const cookieStore = await cookies();
   cookieStore.set(TOKEN_KEY, token);
 }
+
+export async function deleteToken() {
+  const cookieStore = await cookies();
+  cookieStore.delete(TOKEN_KEY);
+}
