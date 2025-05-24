@@ -35,7 +35,7 @@ export function Cart({
 
   const removeItemMutation = useMutation({
     mutationFn: async (itemId: number) => {
-      const res = await fetch(constructApiUrl(`/cart/items/${itemId}`), {
+      const res = await fetch(constructApiUrl(`/cart/${itemId}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ export function Cart({
       itemId: number;
       quantity: number;
     }) => {
-      const res = await fetch(constructApiUrl(`/cart/items/${itemId}`), {
+      const res = await fetch(constructApiUrl(`/cart/${itemId}`), {
         method: "PUT",
         body: JSON.stringify({ quantity }),
         headers: {

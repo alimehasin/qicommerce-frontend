@@ -62,7 +62,7 @@ export function Product({
 
   const addToCart = useMutation({
     mutationFn: async () => {
-      const res = await fetch(constructApiUrl("/cart/items"), {
+      const res = await fetch(constructApiUrl("/cart"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -97,7 +97,7 @@ export function Product({
         return;
       }
 
-      const res = await fetch(constructApiUrl(`/cart/items/${cartItem.id}`), {
+      const res = await fetch(constructApiUrl(`/cart/${cartItem.id}`), {
         method: "PUT",
         body: JSON.stringify({ quantity }),
         headers: {
@@ -129,7 +129,7 @@ export function Product({
         return;
       }
 
-      const res = await fetch(constructApiUrl(`/cart/items/${cartItem.id}`), {
+      const res = await fetch(constructApiUrl(`/cart/${cartItem.id}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
