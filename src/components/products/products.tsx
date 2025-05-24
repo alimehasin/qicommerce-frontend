@@ -107,7 +107,7 @@ export function Products() {
 
   return (
     <div className="p-4">
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 flex items-center gap-4 flex-wrap">
         <div className="flex flex-col gap-1">
           <label htmlFor="stock-status" className="text-sm font-medium">
             Stock Status
