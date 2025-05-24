@@ -13,8 +13,14 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 const cartSchema = z.object({
-  address: z.string().min(1),
-  phoneNumber: z.string().min(1),
+  address: z.string().min(1, "Address is required"),
+  phoneNumber: z
+    .string()
+    .min(1, "Phone number is required")
+    .regex(
+      /^07[0-9]{9}$/,
+      "Please enter a valid Iraqi phone number (e.g., 07x xxx xxxx)",
+    ),
   note: z.string().optional(),
 });
 
@@ -77,9 +83,32 @@ export function CheckoutForm({ token }: { token?: string }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
-        <Input {...form.register("address")} placeholder="Address" />
-        <Input {...form.register("phoneNumber")} placeholder="Phone Number" />
-        <Textarea {...form.register("note")} placeholder="Note" />
+        <div>
+          <Input {...form.register("address")} placeholder="Address" />
+          {form.formState.errors.address && (
+            <p className="text-sm text-red-500 mt-1">
+              {form.formState.errors.address.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <Input {...form.register("phoneNumber")} placeholder="Phone Number" />
+          {form.formState.errors.phoneNumber && (
+            <p className="text-sm text-red-500 mt-1">
+              {form.formState.errors.phoneNumber.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <Textarea {...form.register("note")} placeholder="Note" />
+          {form.formState.errors.note && (
+            <p className="text-sm text-red-500 mt-1">
+              {form.formState.errors.note.message}
+            </p>
+          )}
+        </div>
 
         <Button
           type="submit"
