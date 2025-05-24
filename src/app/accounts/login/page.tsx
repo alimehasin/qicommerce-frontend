@@ -1,19 +1,15 @@
-import Image from "next/image";
 import { Login } from "./login";
 
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <div className="hidden md:flex md:w-1/2 bg-primary/5 relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Image
-            src="/login-illustration.svg"
-            alt="Login illustration"
-            width={500}
-            height={500}
-            className="object-contain"
-            priority
-          />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+          <h1 className="text-4xl font-bold">QiCommerce</h1>
+
+          <p className="text-sm text-muted-foreground">
+            Your one stop shop for all your ecommerce needs.
+          </p>
         </div>
       </div>
 
