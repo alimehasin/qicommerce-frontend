@@ -40,10 +40,6 @@ export function Profile({
     },
   });
 
-  const handleUpdate = () => {
-    console.log("Update clicked");
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -137,21 +133,15 @@ export function Profile({
 
         {/* Action Buttons */}
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button onClick={handleUpdate} className="flex-1" size="lg">
-              Update Profile
-            </Button>
-
-            <Button
-              size="lg"
-              className="flex-1"
-              variant="destructive"
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
-            >
-              {logoutMutation.isPending ? "Logging out..." : "Logout"}
-            </Button>
-          </div>
+          <Button
+            size="lg"
+            className="w-full"
+            variant="destructive"
+            disabled={logoutMutation.isPending}
+            onClick={() => logoutMutation.mutate()}
+          >
+            {logoutMutation.isPending ? "Logging out..." : "Logout"}
+          </Button>
         </div>
       </div>
     </div>
