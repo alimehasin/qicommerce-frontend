@@ -19,6 +19,10 @@ export default async function CartPage() {
     },
   });
 
+  if (!cartRes.ok) {
+    redirect("/login?redirect=/cart");
+  }
+
   const cart: CartServerType = await cartRes.json();
 
   return <Cart cart={cart} token={token} />;
