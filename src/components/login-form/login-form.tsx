@@ -51,8 +51,8 @@ export function LoginForm({
 
       onSuccess();
     },
-    onError: () => {
-      toast.error("Invalid email or password");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
