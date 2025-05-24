@@ -11,6 +11,7 @@ export function Login() {
 
   return (
     <LoginForm
+      redirectPath={redirectPath}
       onSuccess={() => {
         router.push(redirectPath);
         toast.success("Login successful");

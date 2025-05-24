@@ -11,6 +11,7 @@ export function Register() {
 
   return (
     <RegisterForm
+      redirectPath={redirectPath}
       onSuccess={() => {
         router.push(redirectPath);
         toast.success("Register successful");

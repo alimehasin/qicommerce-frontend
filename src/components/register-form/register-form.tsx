@@ -12,13 +12,25 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-const registerSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    password: z.string().min(8),
+    password_confirmation: z.string().min(8),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    path: ["password_confirmation"],
+    message: "Passwords do not match",
+  });
 
-export function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
+export function RegisterForm({
+  onSuccess,
+  redirectPath,
+}: {
+  onSuccess: () => void;
+  redirectPath?: string;
+}) {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
   });
@@ -36,6 +48,7 @@ export function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
       if (!res.ok) {
         const error = await res.json();
+        console.log(error);
         throw new Error(error.message);
       }
 
@@ -85,6 +98,18 @@ export function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
               {form.formState.errors.password.message}
             </p>
           )}
+
+          <Input
+            type="password"
+            placeholder="Password Confirmation"
+            {...form.register("password_confirmation")}
+          />
+
+          {form.formState.errors.password_confirmation && (
+            <p className="text-sm text-red-500">
+              {form.formState.errors.password_confirmation.message}
+            </p>
+          )}
         </div>
 
         <Button
@@ -109,7 +134,7 @@ export function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
       <div className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link
-          href="/accounts/login"
+          href={`/accounts/login?redirect=${redirectPath}`}
           className="text-primary hover:underline font-medium"
         >
           Sign in

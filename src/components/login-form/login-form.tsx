@@ -17,7 +17,13 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-export function LoginForm({ onSuccess }: { onSuccess: () => void }) {
+export function LoginForm({
+  onSuccess,
+  redirectPath,
+}: {
+  onSuccess: () => void;
+  redirectPath?: string;
+}) {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
@@ -99,8 +105,8 @@ export function LoginForm({ onSuccess }: { onSuccess: () => void }) {
       <div className="text-center text-sm text-muted-foreground">
         Don't have an account?{" "}
         <Link
-          href="/accounts/register"
           className="text-primary hover:underline font-medium"
+          href={`/accounts/register?redirect=${redirectPath}`}
         >
           Sign up
         </Link>
