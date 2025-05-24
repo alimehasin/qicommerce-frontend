@@ -128,10 +128,10 @@ export function Cart({
                 >
                   <div className="relative w-24 h-24 flex-shrink-0">
                     <Image
-                      src={constructImageUrl(item.product.image_path)}
-                      alt={item.product.name}
                       fill
+                      alt={item.product.name}
                       className="object-contain rounded-md"
+                      src={constructImageUrl(item.product.image_path)}
                     />
                   </div>
 
@@ -170,7 +170,8 @@ export function Cart({
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
-                      <div className="flex items-center gap-4">
+
+                      <div className="flex items-center gap-4 mx-4">
                         <span className="font-semibold">
                           {(
                             item.product.price * item.quantity
