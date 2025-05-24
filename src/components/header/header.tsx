@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import type { CartServerType } from "@/types/cart";
 import { constructApiUrl } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
-import { Menu, Search, ShoppingCart } from "lucide-react";
+import { Menu, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -79,6 +79,12 @@ export function Header({ token }: { token?: string }) {
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
                 {cart.data?.items?.length ?? 0}
               </span>
+            </Button>
+          </Link>
+
+          <Link href="/profile">
+            <Button variant="ghost" size="icon">
+              <User className="h-5 w-5" />
             </Button>
           </Link>
 
