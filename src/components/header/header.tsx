@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { CartServerType } from "@/types/cart";
 import { constructApiUrl } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
-import { Menu, Search, ShoppingCart, User } from "lucide-react";
+import { Menu, Package, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -40,45 +39,19 @@ export function Header({ token }: { token?: string }) {
           <span className="text-xl font-bold">QiCommerce</span>
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link
-            href="/products"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Products
-          </Link>
-          <Link
-            href="/categories"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Categories
-          </Link>
-          <Link
-            href="/deals"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Deals
-          </Link>
-        </nav>
-
         <div className="flex items-center space-x-4">
-          <div className="hidden md:flex items-center space-x-2">
-            <Input
-              type="search"
-              placeholder="Search products..."
-              className="w-[200px]"
-            />
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
-
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
                 {cart.data?.items?.length ?? 0}
               </span>
+            </Button>
+          </Link>
+
+          <Link href="/orders">
+            <Button variant="ghost" size="icon">
+              <Package className="h-5 w-5" />
             </Button>
           </Link>
 
@@ -102,37 +75,16 @@ export function Header({ token }: { token?: string }) {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="container mx-auto p-4 space-y-4">
-            <div className="flex items-center space-x-2">
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="flex-1"
-              />
-              <Button variant="ghost" size="icon">
-                <Search className="h-5 w-5" />
-              </Button>
-            </div>
             <nav className="flex flex-col space-y-4">
               <Link
-                href="/products"
+                href="/orders"
                 className="text-sm font-medium transition-colors hover:text-primary"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Products
-              </Link>
-              <Link
-                href="/categories"
-                className="text-sm font-medium transition-colors hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Categories
-              </Link>
-              <Link
-                href="/deals"
-                className="text-sm font-medium transition-colors hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Deals
+                <div className="flex items-center space-x-2">
+                  <Package className="h-5 w-5" />
+                  <span>Orders</span>
+                </div>
               </Link>
             </nav>
           </div>
