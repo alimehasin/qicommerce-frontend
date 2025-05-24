@@ -88,43 +88,58 @@ export function Products() {
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center gap-4">
-        <Select
-          value={includeOutOfStock ? "true" : "false"}
-          onValueChange={(value) => setIncludeOutOfStock(value === "true")}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Stock Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="true">Include Out of Stock</SelectItem>
-            <SelectItem value="false">In Stock Only</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="stock-status" className="text-sm font-medium">
+            Stock Status
+          </label>
+          <Select
+            value={includeOutOfStock ? "true" : "false"}
+            onValueChange={(value) => setIncludeOutOfStock(value === "true")}
+          >
+            <SelectTrigger className="w-[180px]" id="stock-status">
+              <SelectValue placeholder="Stock Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="true">Include Out of Stock</SelectItem>
+              <SelectItem value="false">In Stock Only</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-        <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="sort-by" className="text-sm font-medium">
+            Sort By
+          </label>
+          <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
+            <SelectTrigger className="w-[180px]" id="sort-by">
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
 
-          <SelectContent>
-            <SelectItem value="name">Name</SelectItem>
-            <SelectItem value="price">Price</SelectItem>
-          </SelectContent>
-        </Select>
+            <SelectContent>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="price">Price</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-        <Select
-          value={sortDirection}
-          onValueChange={(value) => setSortDirection(value)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort Direction" />
-          </SelectTrigger>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="sort-direction" className="text-sm font-medium">
+            Sort Direction
+          </label>
+          <Select
+            value={sortDirection}
+            onValueChange={(value) => setSortDirection(value)}
+          >
+            <SelectTrigger className="w-[180px]" id="sort-direction">
+              <SelectValue placeholder="Sort Direction" />
+            </SelectTrigger>
 
-          <SelectContent>
-            <SelectItem value="asc">Ascending</SelectItem>
-            <SelectItem value="desc">Descending</SelectItem>
-          </SelectContent>
-        </Select>
+            <SelectContent>
+              <SelectItem value="asc">Ascending</SelectItem>
+              <SelectItem value="desc">Descending</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
