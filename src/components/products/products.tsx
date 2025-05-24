@@ -4,15 +4,27 @@ import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import type { ProductsServerType } from "@/types/products";
 import { constructApiUrl } from "@/utils/helpers";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export function Products() {
+  const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+
   const products = useInfiniteQuery<ProductsServerType>({
     initialPageParam: 1,
-    queryKey: ["/api/products"],
+    queryKey: ["/api/products", includeOutOfStock],
 
     queryFn: async ({ pageParam = 1 }) => {
-      const url = constructApiUrl(`/products?per_page=4&page=${pageParam}`);
+      const url = constructApiUrl(
+        `/products?per_page=4&page=${pageParam}&includeOutOfStock=${includeOutOfStock}`,
+      );
+
       const res = await fetch(url, {
         headers: {
           "Content-Type": "application/json",
@@ -72,28 +84,45 @@ export function Products() {
   }
 
   return (
-    <div className="p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
-      {products.data?.pages.map((page) =>
-        page.data.map((product, index) => {
-          const isLastProduct =
-            index === page.data.length - 1 &&
-            page === products.data?.pages[products.data?.pages.length - 1];
+    <div className="p-4">
+      <div className="mb-4">
+        <Select
+          value={includeOutOfStock ? "true" : "false"}
+          onValueChange={(value) => setIncludeOutOfStock(value === "true")}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Stock Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="true">Include Out of Stock</SelectItem>
+            <SelectItem value="false">In Stock Only</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          return (
-            <div
-              key={product.id}
-              ref={isLastProduct ? lastProductRef : undefined}
-            >
-              <ProductCard product={product} />
-            </div>
-          );
-        }),
-      )}
+      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+        {products.data?.pages.map((page) =>
+          page.data.map((product, index) => {
+            const isLastProduct =
+              index === page.data.length - 1 &&
+              page === products.data?.pages[products.data?.pages.length - 1];
 
-      {products.isFetchingNextPage &&
-        Array.from({ length: 4 }).map((_, index) => (
-          <ProductCardSkeleton key={`loading-${index}`} />
-        ))}
+            return (
+              <div
+                key={product.id}
+                ref={isLastProduct ? lastProductRef : undefined}
+              >
+                <ProductCard product={product} />
+              </div>
+            );
+          }),
+        )}
+
+        {products.isFetchingNextPage &&
+          Array.from({ length: 4 }).map((_, index) => (
+            <ProductCardSkeleton key={`loading-${index}`} />
+          ))}
+      </div>
     </div>
   );
 }
