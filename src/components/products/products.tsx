@@ -15,14 +15,16 @@ import {
 
 export function Products() {
   const [includeOutOfStock, setIncludeOutOfStock] = useState(false);
+  const [sortBy, setSortBy] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const products = useInfiniteQuery<ProductsServerType>({
     initialPageParam: 1,
-    queryKey: ["/api/products", includeOutOfStock],
+    queryKey: ["/api/products", includeOutOfStock, sortBy, sortDirection],
 
     queryFn: async ({ pageParam = 1 }) => {
       const url = constructApiUrl(
-        `/products?per_page=4&page=${pageParam}&includeOutOfStock=${includeOutOfStock}`,
+        `/products?per_page=4&page=${pageParam}&includeOutOfStock=${includeOutOfStock}&sort_by=${sortBy}&sort_direction=${sortDirection}`,
       );
 
       const res = await fetch(url, {
@@ -85,7 +87,7 @@ export function Products() {
 
   return (
     <div className="p-4">
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-4">
         <Select
           value={includeOutOfStock ? "true" : "false"}
           onValueChange={(value) => setIncludeOutOfStock(value === "true")}
@@ -96,6 +98,31 @@ export function Products() {
           <SelectContent>
             <SelectItem value="true">Include Out of Stock</SelectItem>
             <SelectItem value="false">In Stock Only</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort By" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="name">Name</SelectItem>
+            <SelectItem value="price">Price</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={sortDirection}
+          onValueChange={(value) => setSortDirection(value)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort Direction" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="asc">Ascending</SelectItem>
+            <SelectItem value="desc">Descending</SelectItem>
           </SelectContent>
         </Select>
       </div>
