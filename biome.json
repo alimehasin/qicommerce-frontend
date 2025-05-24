@@ -30,7 +30,9 @@
       "nursery": {},
       "security": {},
       "complexity": {},
-      "suspicious": {},
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
       "performance": {},
       "correctness": {
         "noUnusedImports": "warn",

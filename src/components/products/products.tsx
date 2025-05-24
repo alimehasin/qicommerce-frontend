@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductCard } from "@/components/product-card";
+import { ProductCard, ProductCardSkeleton } from "@/components/product-card";
 import { env } from "@/env";
 import type { ProductsServerType } from "@/types/products";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -53,7 +53,13 @@ export function Products() {
   );
 
   if (products.status === "pending") {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <ProductCardSkeleton key={`skeleton-${index}`} />
+        ))}
+      </div>
+    );
   }
 
   if (products.status === "error") {
@@ -79,9 +85,10 @@ export function Products() {
         }),
       )}
 
-      {products.isFetchingNextPage && (
-        <div className="col-span-full text-center py-4">Loading more...</div>
-      )}
+      {products.isFetchingNextPage &&
+        Array.from({ length: 4 }).map((_, index) => (
+          <ProductCardSkeleton key={`loading-${index}`} />
+        ))}
     </div>
   );
 }
